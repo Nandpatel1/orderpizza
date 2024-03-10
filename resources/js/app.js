@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Notyf } from 'notyf';
+import initAdmin from "./admin";
 
 let addToCart = document.querySelectorAll('.add-to-cart');
 let cartCounter = document.querySelector('#cartCounter');
@@ -29,3 +30,13 @@ addToCart.forEach((btn) => {
         updateCart(pizza);
     })
 })
+
+// Remove alter message after X seconds
+const alterMsg = document.querySelector('#success-alert');
+if (alterMsg) {
+    setTimeout(() => {
+        alterMsg.remove();
+    }, 2000);
+}
+
+initAdmin();
