@@ -1,7 +1,8 @@
 import axios from 'axios';
 import moment from 'moment';
+import { Notyf } from 'notyf';
 
-const initAdmin = async () => {
+const initAdmin = async (socket) => {
     const orderTableBody = document.querySelector('#orderTableBody');
     let orders = [];
     let markup;
@@ -14,6 +15,9 @@ const initAdmin = async () => {
         });
 
         orders = res.data;
+        if (typeof orders != 'object') {
+            return;
+        }
         markup = generateMarkup(orders);
         orderTableBody.innerHTML = markup;
     }
@@ -29,9 +33,7 @@ const initAdmin = async () => {
             `
         }).join('')
     }
-    // <td class="border px-4 py-2">${order.customerId.phone}</td>
     function generateMarkup(orders) {
-        console.log("dd ", orders);
         return orders.map(order => {
             return `
                 <tr>
@@ -83,6 +85,17 @@ const initAdmin = async () => {
         `
         }).join('')
     }
+
+    socket.on('syncOrderPlaced', (order) => {
+        let notyf = new Notyf({
+            duration: 1000,
+            position: { x: 'right', y: 'top' },
+        });
+        notyf.success('New order!');
+        orders.unshift(order);
+        orderTableBody.innerHTML = '';
+        orderTableBody.innerHTML = generateMarkup(orders);
+    });
 }
 
 export default initAdmin;

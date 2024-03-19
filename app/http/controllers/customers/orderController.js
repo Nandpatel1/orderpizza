@@ -20,8 +20,14 @@ const orderController = () => {
 
             try {
                 const result = await order.save();
+                const placedOrder = await Order.populate(result, { path: 'customerId' });
+
                 req.flash('success', 'Order placed successfully');
                 delete req.session.cart;
+                // Emit
+                const eventEmitter = req.app.get('eventEmitter');
+                eventEmitter.emit('orderPlaced', placedOrder);
+
                 return res.redirect('/customer/orders');
             }
             catch (err) {
@@ -33,6 +39,16 @@ const orderController = () => {
             const orders = await Order.find({ customerId: req.user._id }, null, { sort: { createdAt: -1 } });
             res.header('Cache-Control', 'no-store')
             res.render('customers/orders', { orders, moment });
+        },
+        async show(req, res) {
+            const order = await Order.findById(req.params.id);
+
+            // Authorize user
+            if (order.customerId.toString() === req.user._id.toString()) {
+                return res.render('customers/singleOrder', { order });
+            }
+            return res.redirect('/');
+
         }
     }
 }
