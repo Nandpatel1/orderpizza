@@ -14,7 +14,7 @@ const passport = require('passport');
 const Emitter = require('events');
 
 // Database connection
-const url = 'mongodb://localhost/pizza';
+const url = process.env.MONGO_CONNECTION_URL;
 mongoose.connect(url);
 const connection = mongoose.connection;
 connection.once('open', () => {
@@ -69,6 +69,9 @@ app.set('views', path.join(__dirname, '/resources/views'));
 app.set('view engine', 'ejs');
 
 initRoute(app);
+app.use((req, res) => {
+    res.status(404).render('errors/404');
+})
 
 const server = app.listen(PORT, () => {
     console.log('Server running on port 3000');

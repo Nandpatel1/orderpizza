@@ -15,9 +15,6 @@ const initAdmin = async (socket) => {
         });
 
         orders = res.data;
-        if (typeof orders != 'object') {
-            return;
-        }
         markup = generateMarkup(orders);
         orderTableBody.innerHTML = markup;
     }
