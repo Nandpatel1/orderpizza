@@ -1,0 +1,16 @@
+<div class="payment-body">
+    <div class="payment-container">
+        <div class="payment-icon">
+            <div class="<%= paymentData.status %>-animation"></div>
+            <div class="<%= paymentData.icon %>"></div>
+        </div>
+        <h1><b><%= paymentData.paymentStatus %></b></h1>
+       
+        <% if (paymentData.status === 'failure'){ %>
+            <p> <%= paymentData.message[0] %>  <span class="highlight"> <%= paymentData.message[1] %> </span> <%= paymentData.message[2] %> <span class="highlight"><%= paymentData.message[3] %></span> <%= paymentData.message[4] %></p> </br>
+            <button class="px-6 py-2 rounded-full text-white font-bold mt-6 cancel-order">Cancel order</button>
+        <% } else { %>
+            <p><%= paymentData.message %></p>
+        <% } %>
+    </div>
+</div>

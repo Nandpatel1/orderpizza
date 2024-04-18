@@ -33,6 +33,7 @@ let mongoStore = MongoDbStore.create({
 // Event emitter
 const eventEmitter = new Emitter();
 app.set('eventEmitter', eventEmitter);
+global.eventEmitter = eventEmitter;
 
 // Session config
 app.use(session({

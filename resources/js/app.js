@@ -2,6 +2,8 @@ import axios from "axios";
 import { Notyf } from 'notyf';
 import initAdmin from "./admin";
 import moment from "moment";
+import initStripe from "./stripe";
+import orderAndPayment from "./apiService";
 
 let addToCart = document.querySelectorAll('.add-to-cart');
 let cartCounter = document.querySelector('#cartCounter');
@@ -71,6 +73,10 @@ const updateStatus = (order) => {
 }
 
 updateStatus(order);
+
+initStripe();
+
+orderAndPayment.continueWithCod();
 
 // Socket
 let socket = io();

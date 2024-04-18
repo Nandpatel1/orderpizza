@@ -22,13 +22,21 @@ const initRoute = (app) => {
     app.post('/update-cart', cartController().update);
 
     // Customer routes
-    app.post('/orders', orderController().store);
-    app.get('/customer/orders',auth, orderController().index);
-    app.get('/customer/orders/:id',auth, orderController().show);
+    app.post('/orders', orderController.store.bind(orderController));
+    // app.post('/orders', orderController.store);
+    app.get('/orders', orderController.createStripePayment);
+    app.get('/customer/orders', auth, orderController.index);
+    app.get('/customer/orders/:id', auth, orderController.show);
 
     // Admin routes
-    app.get('/admin/orders',admin, adminOrderController().index);
-    app.post('/admin/order/status',admin, statusController().update);
+    app.get('/admin/orders', admin, adminOrderController().index);
+    app.post('/admin/order/status', admin, statusController().update);
+
+    // Delete order
+    app.delete('/orders/:orderId', orderController.deleteOrder);
+
+    // Stripe Payment
+    app.get('/paymentStatus', orderController.paymentStatus);
 }
 
 module.exports = initRoute;
